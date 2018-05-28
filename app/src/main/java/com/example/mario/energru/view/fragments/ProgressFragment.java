@@ -15,17 +15,21 @@ import com.example.mario.energru.R;
 import com.example.mario.energru.User;
 import com.example.mario.energru.UsersAdapter;
 import com.example.mario.energru.UsersService;
+import com.example.mario.energru.Usuario;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,8 +39,8 @@ public class ProgressFragment extends Fragment {
     String baseUrl = "https://memorama-fi-unam.herokuapp.com/";
 
     private RecyclerView rvUsers;
-    private ArrayList<User> list;
     private UsersAdapter adapter;
+    private Retrofit retrofit;
 
     public ProgressFragment() {
         // Required empty public constructor
@@ -47,7 +51,12 @@ public class ProgressFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_progress, container, false);
+        initRecyclerView(view);
+        initService();
+        return view;
+    }
 
+    public void initRecyclerView(View view){
 
         rvUsers = (RecyclerView) view.findViewById(R.id.rvUsers);
         rvUsers.setHasFixedSize(true);
@@ -55,30 +64,37 @@ public class ProgressFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getApplicationContext());
         rvUsers.setLayoutManager(llm);
 
-        adapter = new UsersAdapter(getActivity().getApplicationContext(), list);
+        //adapter = new UsersAdapter(list);
         rvUsers.setAdapter(adapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(rvUsers.getContext(),llm.getOrientation());
         rvUsers.addItemDecoration(itemDecoration);
+    }
 
+    public void initService(){
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl)
+        retrofit = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         UsersService usersService =retrofit.create(UsersService.class);
+        Call<User> userLit = usersService.getUsers();
 
-        Call<User> lista = usersService.getUsers();
-
-        lista.enqueue(new Callback<User>() {
+        userLit.enqueue(new Callback<User>() {
 
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()){
-                    User list = response.body();
+                    User responde = response.body();
+                    List<Usuario> list = responde.getUsuarios();
+
+                    //for (int i = 0; i < list.size(); i++ ) {
+                        //Usuario u = list.get(i);
+                      //  Log.d(TAG, "onResponse: " + u.getName());
+                    //}
                 }
 
             }
@@ -89,9 +105,8 @@ public class ProgressFragment extends Fragment {
 
             }
         });
-
-        return view;
     }
+
 
 
 }

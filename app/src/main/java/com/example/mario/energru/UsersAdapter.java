@@ -12,20 +12,18 @@ import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHolder> {
 
-    private List<Usuario> list;
+    private ArrayList<Usuario> list;
 
     private Context context;
 
 
-    public UsersAdapter(Context context, ArrayList<User> list) {
-        this.context = context;
-        this.list = new ArrayList<>();
+    public UsersAdapter(ArrayList<Usuario> list) {
+        this.list = list;
     }
 
     @Override
     public UsersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_row,parent,false);
-
         return new UsersViewHolder(v);
     }
 

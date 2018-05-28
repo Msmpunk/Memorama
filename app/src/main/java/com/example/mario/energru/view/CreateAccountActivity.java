@@ -2,6 +2,8 @@ package com.example.mario.energru.view;
 
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +36,21 @@ public class CreateAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_account);
 
         showToolbar(getResources().getString(R.string.toolbar_create_Account),true);
+
+        TextInputEditText tvEmail = (TextInputEditText) findViewById(R.id.email);
+        TextInputEditText tvPassword = (TextInputEditText) findViewById(R.id.password);
+        TextInputEditText tvUserName = (TextInputEditText) findViewById(R.id.user_name);
+        TextInputEditText tvNickname= (TextInputEditText) findViewById(R.id.nickname);
+        TextInputEditText tvRepeatPassword= (TextInputEditText) findViewById(R.id.repeat_password);
+        Button btbCreate = (Button) findViewById(R.id.login);
+
+        btbCreate.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     public void showToolbar(String title, boolean upButton){
@@ -61,31 +78,46 @@ public class CreateAccountActivity extends AppCompatActivity {
 
                 if(btnRegister.getText().toString().equals(name_bottom)){
 
-                    if(editTextname.getText().toString().equals(""))
+                    if(editTextname.getText().toString().equals("")){
                         Snackbar.make(view, "El nombre es necesario para continuar", Snackbar.LENGTH_LONG)
                                 .show();
-                    else if (editTextusername.getText().toString().equals(""))
+                        return;
+                    }
+
+                    if (editTextusername.getText().toString().equals("")){
                         Snackbar.make(view, "El nombre de usuario es necesario para continuar", Snackbar.LENGTH_LONG)
                                 .show();
-                    else if (editTextemail.getText().toString().equals(""))
+                        return;
+                    }
+
+                    if (editTextemail.getText().toString().equals("")){
                         Snackbar.make(view, "El Correo es necesario para continuar", Snackbar.LENGTH_LONG)
                                 .show();
-                    else if(editTextrepeat_password.getText().toString().equals(""))
-                        Snackbar.make(view, "Agregue la contraseña para continuar", Snackbar.LENGTH_LONG)
-                                .show();
+                        return;
+                    }
 
-                    else if(editTextrepeat_password.getText().toString().equals(""))
+                    if(editTextrepeat_password.getText().toString().equals("")) {
                         Snackbar.make(view, "Agregue la contraseña para continuar", Snackbar.LENGTH_LONG)
                                 .show();
-                    else if(!password.equals(password2))
+                        return;
+                    }
+
+                    if(editTextrepeat_password.getText().toString().equals("")){
+                        Snackbar.make(view, "Agregue la contraseña para continuar", Snackbar.LENGTH_LONG)
+                                .show();
+                        return;
+                    }
+
+                    if(!password.equals(password2)){
                         Snackbar.make(view, "Las contraeñas no son iguales", Snackbar.LENGTH_LONG)
                                 .show();
-                    else {
-                        Snackbar.make(view, "Ahora inicia sesion :D" , Snackbar.LENGTH_LONG)
-                                .show();
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intent);
+                        return;
                     }
+
+                    Snackbar.make(view, "Ahora inicia sesion :D" , Snackbar.LENGTH_LONG)
+                            .show();
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
 
                 }
             }

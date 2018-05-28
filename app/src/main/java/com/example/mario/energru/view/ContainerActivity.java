@@ -36,13 +36,13 @@ public class ContainerActivity extends AppCompatActivity {
                         .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).addToBackStack(null).commit();
                         break;
                     case R.id.profile:
-                        showToolbar(getResources().getString(R.string.toolbar_editar),false);
+                        showToolbar(getResources().getString(R.string.toolbar_editar),true);
                         ProfileFragment profileFragment = new ProfileFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_aplication,profileFragment)
                                 .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).addToBackStack(null).commit();
                         break;
                     case R.id.progress:
-                        showToolbar(getResources().getString(R.string.toolbar_estadisticas),true);
+                        showToolbar(getResources().getString(R.string.toolbar_estadisticas),false);
                         ProgressFragment progressFragment = new ProgressFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_aplication,progressFragment)
                                 .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK).addToBackStack(null).commit();

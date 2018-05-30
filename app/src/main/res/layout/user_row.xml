@@ -3,24 +3,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="40dp"
+    android:background="@color/primary_light"
     android:orientation="vertical">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/user_name_"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="123dp" />
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:layout_weight=".5"/>
 
     <TextView
         android:id="@+id/user_score_"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="310dp"
-        tools:layout_editor_absoluteY="123dp" />
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_weight=".5"/>
+
+</LinearLayout>
+
+
+
+
+
 </android.support.constraint.ConstraintLayout>

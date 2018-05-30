@@ -41,6 +41,7 @@ public class ProgressFragment extends Fragment {
     private RecyclerView rvUsers;
     private UsersAdapter adapter;
     private Retrofit retrofit;
+    private ArrayList<Usuario> list;
 
     public ProgressFragment() {
         // Required empty public constructor
@@ -59,12 +60,13 @@ public class ProgressFragment extends Fragment {
     public void initRecyclerView(View view){
 
         rvUsers = (RecyclerView) view.findViewById(R.id.rvUsers);
+        adapter = new UsersAdapter();
         rvUsers.setHasFixedSize(true);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getApplicationContext());
         rvUsers.setLayoutManager(llm);
 
-        //adapter = new UsersAdapter(list);
+
         rvUsers.setAdapter(adapter);
 
         DividerItemDecoration itemDecoration = new DividerItemDecoration(rvUsers.getContext(),llm.getOrientation());
@@ -89,12 +91,9 @@ public class ProgressFragment extends Fragment {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()){
                     User responde = response.body();
-                    List<Usuario> list = responde.getUsuarios();
+                    List<Usuario> lista_usr = responde.getUsuarios();
+                    adapter.addUsersRV(lista_usr);
 
-                    //for (int i = 0; i < list.size(); i++ ) {
-                        //Usuario u = list.get(i);
-                      //  Log.d(TAG, "onResponse: " + u.getName());
-                    //}
                 }
 
             }

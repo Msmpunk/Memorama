@@ -3,17 +3,28 @@ package com.example.mario.energru;
 
 public class Usuario {
 
-    private String id;
+    private String id_;
     private String name;
     private String nickname;
     private String email;
+    private String score;
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
+
+
 
     public String getId() {
-        return id;
+        return id_;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id_ = id;
     }
 
     public String getName() {

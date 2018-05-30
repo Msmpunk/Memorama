@@ -1,22 +1,42 @@
 package com.example.mario.energru.view.fragments;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.example.mario.energru.LoginModel;
 import com.example.mario.energru.R;
+import com.example.mario.energru.ResponseBodyServise;
+import com.example.mario.energru.UserScore;
+import com.example.mario.energru.UsersService;
+import com.example.mario.energru.view.ContainerActivity;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PlayFragment extends Fragment implements View.OnClickListener{
+    private Retrofit retrofit;
+    String baseUrl = "https://memorama-fi-unam.herokuapp.com/";
 
     ImageButton imbCarta1, imbCarta2, imbCarta3, imbCarta4, imbCarta5, imbCarta6, imbCarta7, imbCarta8;
     int[] imagenes = {R.drawable.ic_image1,R.drawable.ic_image2,R.drawable.ic_image3,R.drawable.ic_image4};
@@ -27,10 +47,20 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
     int[] juego_terminado = new int[8];
     int turno=0, ganador=0;
 
+    private String id_session_;
+
     public PlayFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(getArguments() != null) {
+            id_session_ = getArguments().getString("useridfrom");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +85,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
         imbCarta8 = (ImageButton) view.findViewById(R.id.imbCarta8);
         imbCarta8.setOnClickListener(this);
 
+        Toast.makeText(getContext(),id_session_,Toast.LENGTH_SHORT).show();
         if (savedInstanceState == null)
         {
             asignarImagenes();
@@ -188,7 +219,8 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
                 ganador++;
 
                 if(ganador==4){
-                    Toast.makeText(getContext(),"!Felicidades has ganado¡",Toast.LENGTH_SHORT).show();
+                    getScore();
+                    Toast.makeText(getContext(),"Eres el mejor, pronto tendremos mas niveles",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -245,4 +277,75 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
 
         }
     }
+
+
+    public void peticion(int score){
+
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+
+        retrofit = new Retrofit.Builder().baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        UserScore score_ = new UserScore(score);
+
+        UsersService usersService =retrofit.create(UsersService.class);
+        Call<ResponseBodyServise> call = usersService.updateScore("5b0e8248bf810700147dd48a",score_);
+
+        call.enqueue(new Callback<ResponseBodyServise>() {
+            @Override
+            public void onResponse(Call<ResponseBodyServise> call, Response<ResponseBodyServise> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(getContext(),"Tus datos se actualizaron\"",Toast.LENGTH_SHORT).show();
+                }else{
+                    String mensaje =response.body().getMensaje();
+                    Toast.makeText(getContext(),mensaje,Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBodyServise> call, Throwable t) {
+                Log.e("onFailure",t.toString());
+            }
+        });
+    }
+
+    public void getScore(){
+
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+
+        retrofit = new Retrofit.Builder().baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        UsersService usersService =retrofit.create(UsersService.class);
+
+        Call<ResponseBodyServise> call = usersService.getScore("5b0e8248bf810700147dd48a");
+
+        call.enqueue(new Callback<ResponseBodyServise>() {
+            @Override
+            public void onResponse(Call<ResponseBodyServise> call, Response<ResponseBodyServise> response) {
+                if (response.isSuccessful()){
+                    response.body();
+                    int score =response.body().getScore();
+                    peticion(score+20);
+
+                }else{
+                    String mensaje =response.body().getMensaje();
+                    Toast.makeText(getContext(),mensaje,Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBodyServise> call, Throwable t) {
+                Log.e("onFailure",t.toString());
+            }
+        });
+    }
+
+
 }

@@ -20,7 +20,6 @@ public class ContainerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container);
 
-
         BottomBar bottomBar = findViewById(R.id.bottombar);
         bottomBar.setDefaultTab(R.id.play);
 

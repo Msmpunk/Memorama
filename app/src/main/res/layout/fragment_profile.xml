@@ -30,11 +30,12 @@
                 android:src="@drawable/ic_profile1" />
 
             <TextView
+                android:id="@+id/user_id_dataBase"
                 android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Buen día Mario"
+                android:text=""
                 android:textSize="20dp"
                 android:textColor="#ffffff"/>
 
@@ -57,10 +58,10 @@
                 android:theme="@style/EditTextWhite">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/email"
+                    android:id="@+id/name_dataBase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Mario Alberto"
+                    android:hint=""
                     android:textSize="@dimen/fab_margin" />
 
             </android.support.design.widget.TextInputLayout>
@@ -72,10 +73,10 @@
                 android:theme="@style/EditTextWhite">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/nickname"
+                    android:id="@+id/nickname_dataBase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="msmpunk"
+                    android:hint=""
                     android:textSize="@dimen/fab_margin" />
 
             </android.support.design.widget.TextInputLayout>
@@ -87,10 +88,10 @@
                 android:theme="@style/EditTextWhite">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/first_name"
+                    android:id="@+id/email_dataBase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="msm0102712@gmail.com"
+                    android:hint=""
                     android:textSize="@dimen/fab_margin" />
 
             </android.support.design.widget.TextInputLayout>

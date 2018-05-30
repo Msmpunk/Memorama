@@ -17,8 +17,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
     private Context context;
 
 
-    public UsersAdapter(ArrayList<Usuario> list) {
-        this.list = list;
+    public UsersAdapter() {
+        this.list = new ArrayList<>();
     }
 
     @Override
@@ -31,6 +31,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
     public void onBindViewHolder(UsersViewHolder holder, int position) {
         final Usuario user = list.get(position);
         holder.tvName.setText(user.getNickname());
+        holder.tvScore.setText(user.getScore());
     }
 
     @Override
@@ -38,7 +39,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
         return list.size();
     }
 
+    public void addUsersRV(List<Usuario> lista_usr) {
+        list.addAll(lista_usr);
+        notifyDataSetChanged();
+    }
+
     public class UsersViewHolder extends RecyclerView.ViewHolder {
+
 
         TextView tvName;
         TextView tvScore;

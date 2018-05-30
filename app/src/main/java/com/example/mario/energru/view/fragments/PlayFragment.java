@@ -47,7 +47,10 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
     int[] juego_terminado = new int[8];
     int turno=0, ganador=0;
 
-    private String id_session_;
+    SharedPreferences userDataPrefs;
+
+    String getName;
+    String getId;
 
     public PlayFragment() {
         // Required empty public constructor
@@ -57,9 +60,6 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getArguments() != null) {
-            id_session_ = getArguments().getString("useridfrom");
-        }
     }
 
     @Override
@@ -67,6 +67,11 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_play, container, false);
+
+        userDataPrefs = getContext().getSharedPreferences("userData", Context.MODE_PRIVATE);
+
+        getName = userDataPrefs.getString("nombreUser", "");
+        getId = userDataPrefs.getString("idtoCompare", "");
 
         imbCarta1 = (ImageButton) view.findViewById(R.id.imbCarta1);
         imbCarta1.setOnClickListener(this);
@@ -85,7 +90,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
         imbCarta8 = (ImageButton) view.findViewById(R.id.imbCarta8);
         imbCarta8.setOnClickListener(this);
 
-        Toast.makeText(getContext(),id_session_,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),getId,Toast.LENGTH_SHORT).show();
         if (savedInstanceState == null)
         {
             asignarImagenes();
@@ -292,7 +297,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
         UserScore score_ = new UserScore(score);
 
         UsersService usersService =retrofit.create(UsersService.class);
-        Call<ResponseBodyServise> call = usersService.updateScore("5b0e8248bf810700147dd48a",score_);
+        Call<ResponseBodyServise> call = usersService.updateScore(getId,score_);
 
         call.enqueue(new Callback<ResponseBodyServise>() {
             @Override

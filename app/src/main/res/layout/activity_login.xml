@@ -51,7 +51,7 @@
                 android:theme="@style/EditTextWhite"
                 >
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/email_"
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_username"
@@ -65,7 +65,7 @@
                 android:theme="@style/EditTextWhite"
                 >
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/password_"
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
@@ -75,7 +75,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/login_"
+                android:id="@+id/login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/text_nutton_login"

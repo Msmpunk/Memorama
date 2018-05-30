@@ -35,27 +35,30 @@ public class LoginActivity extends AppCompatActivity {
     EditText editTextemail;
     EditText editTextpassword;
 
-
+    SharedPreferences userDataPrefs;
+    SharedPreferences.Editor editorUserData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        btnLogin = findViewById(R.id.login_);
-        editTextemail = findViewById(R.id.email_);
-        editTextpassword = findViewById(R.id.password_);
+        btnLogin = findViewById(R.id.login);
+        editTextemail = findViewById(R.id.email);
+        editTextpassword = findViewById(R.id.password);
+
+        userDataPrefs = getSharedPreferences("userData", Context.MODE_PRIVATE);
 
         cargarDatos();
         validations();
     }
 
 
-    public void goCreateAccount(View view){
+    public void goCreateAccount(View view) {
         Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
         startActivity(intent);
     }
 
-    public void validations(){
+    public void validations() {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,26 +67,26 @@ public class LoginActivity extends AppCompatActivity {
                 String email = editTextemail.getText().toString();
                 String password = editTextpassword.getText().toString();
 
-                if(btnLogin.getText().toString().equals(name_bottom)){
-                    if(editTextemail.getText().toString().equals(""))
+                if (btnLogin.getText().toString().equals(name_bottom)) {
+                    if (editTextemail.getText().toString().equals(""))
                         Snackbar.make(view, "Ingresa tu correo", Snackbar.LENGTH_LONG)
                                 .show();
                     else if (editTextpassword.getText().toString().equals(""))
                         Snackbar.make(view, "Ingresa la contraseña para continuar", Snackbar.LENGTH_LONG)
                                 .show();
                     else {
-                        peticion(email,password,view);
+                        peticion(email, password, view);
                     }
                 }
 
-                saveData(editTextemail.getText().toString(),editTextpassword.getText().toString());
+                saveData(editTextemail.getText().toString(), editTextpassword.getText().toString());
 
 
             }
         });
     }
 
-    public void peticion(String email, String password, final View view){
+    public void peticion(String email, String password, final View view) {
 
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -93,36 +96,41 @@ public class LoginActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        LoginModel login = new LoginModel(email,password);
+        LoginModel login = new LoginModel(email, password);
 
-        UsersService usersService =retrofit.create(UsersService.class);
+        UsersService usersService = retrofit.create(UsersService.class);
         Call<ResponseBodyServise> call = usersService.getValidation(login);
 
         call.enqueue(new Callback<ResponseBodyServise>() {
             @Override
             public void onResponse(Call<ResponseBodyServise> call, Response<ResponseBodyServise> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     response.body();
-                    String name =response.body().getName();
-                    String idtocompere =response.body().get_id();
+                    String name = response.body().getName();
+                    String idtocompere = response.body().get_id();
 
-                    Log.e("",idtocompere);
+                    Log.e("", idtocompere);
 
-                    PlayFragment playFragment = new PlayFragment();
+                    /*PlayFragment playFragment = new PlayFragment();
 
                     Bundle bundle = new Bundle();
 
-                    bundle.putString("useridfrom",idtocompere);
+                    bundle.putString("useridfrom", idtocompere);
 
-                    playFragment.setArguments(bundle);
+                    playFragment.setArguments(bundle); */
 
-                    Snackbar.make(view, "Bienvenido" , Snackbar.LENGTH_LONG)
+                    editorUserData = userDataPrefs.edit();
+                    editorUserData.putString("nombreUser", name);
+                    editorUserData.putString("idtoCompare", idtocompere);
+                    editorUserData.apply();
+
+                    Snackbar.make(view, "Bienvenido", Snackbar.LENGTH_LONG)
                             .show();
                     Intent intent = new Intent(getApplicationContext(), ContainerActivity.class);
                     startActivity(intent);
 
 
-                }else{
+                } else {
 
                     Snackbar.make(view, "Usuario o contraseña incorrecta", Snackbar.LENGTH_LONG)
                             .show();
@@ -131,12 +139,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBodyServise> call, Throwable t) {
-                Log.e("onFailure",t.toString());
+                Log.e("onFailure", t.toString());
             }
         });
     }
 
-    public void saveData(String name, String id){
+    public void saveData(String name, String id) {
 
         SharedPreferences sharedP = getSharedPreferences("Credentiales", Context.MODE_PRIVATE);
 
@@ -145,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences.Editor editor = sharedP.edit();
         editor.putString("user_email", user_emai_);
-        editor.putString("user_password",user_password);
+        editor.putString("user_password", user_password);
         editTextemail.setText(user_emai_);
         editTextpassword.setText(user_password);
 
@@ -153,16 +161,15 @@ public class LoginActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    public void cargarDatos(){
+    public void cargarDatos() {
 
         SharedPreferences getSha = getSharedPreferences("Credentiales", Context.MODE_PRIVATE);
 
-        String email = getSha.getString("user_email","");
-        String pass = getSha.getString("user_password","");
+        String email = getSha.getString("user_email", "");
+        String pass = getSha.getString("user_password", "");
 
         editTextemail.setText(email);
         editTextpassword.setText(pass);
-
 
 
     }

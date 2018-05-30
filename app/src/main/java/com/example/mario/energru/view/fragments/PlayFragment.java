@@ -329,7 +329,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener{
 
         UsersService usersService =retrofit.create(UsersService.class);
 
-        Call<ResponseBodyServise> call = usersService.getScore("5b0e8248bf810700147dd48a");
+        Call<ResponseBodyServise> call = usersService.getScore(getId);
 
         call.enqueue(new Callback<ResponseBodyServise>() {
             @Override
